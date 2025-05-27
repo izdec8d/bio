@@ -1,330 +1,520 @@
-<!DOCTYPE html><html lang="ru"><head>
+<html lang="ru"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kowyaka</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Kow1nc | Kraze</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        html, body {
-            overflow: hidden;
-            scrollbar-width: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        body::-webkit-scrollbar {
-            width: 0;
-            display: none;
-        }
-        
-        body {
+        * {
             margin: 0;
             padding: 0;
-            background-color: #121212;
-            font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: white;
-            position: relative;
+            box-sizing: border-box;
+            cursor: none;
         }
-        
-        .background-video {
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        :root {
+            --main-color: #ffffff;
+            --glow-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .video-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            z-index: 10;
-            opacity: 1;
-            transition: opacity 0.4s ease, z-index 0s 1.5s;
+            z-index: 0;
         }
-        
-        .background-video.faded {
-            opacity: 0.05;
+
+        .video-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.4);
+        }
+
+        .video-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .card {
+            width: 500px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            transform-style: preserve-3d;
+            box-shadow: 0 0 50px var(--glow-color);
+            z-index: 2;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .card.active {
+            opacity: 1;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            backdrop-filter: blur(8px);
             z-index: -1;
         }
-        
-        .container {
-            width: 100%;
-            max-width: 600px;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform: scale(1.3);
-            opacity: 0;
-            animation: fadeIn 1.2s ease-in-out forwards;
-            position: relative;
-            z-index: 1;
-        }
-        
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(1.1) translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1.3) translateY(0);
-            }
-        }
-        
-        @keyframes colorfulGlow {
-            0% {
-                box-shadow: 0 0 90px rgba(66, 218, 190, 0.4);
-            }
-            25% {
-                box-shadow: 0 0 90px rgba(125, 170, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 90px rgba(190, 130, 255, 0.4);
-            }
-            75% {
-                box-shadow: 0 0 90px rgba(255, 181, 128, 0.4);
-            }
-            100% {
-                box-shadow: 0 0 90px rgba(66, 218, 190, 0.4);
-            }
-        }
-        
-        .card {
-            width: 100%;
-            max-width: 500px;
-            background-color: rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
-            overflow: hidden;
-            animation: colorfulGlow 8s ease-in-out infinite;
-        }
-        
-        .banner-container {
-            width: 100%;
-            padding: 0 15px;
-            box-sizing: border-box;
-            margin-top: 15px;
-        }
-        
-        .banner {
-            width: 100%;
-            height: 80px;
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .profile-picture {
-            width: 50px;
-            height: 50px;
+
+        .avatar {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            border: 3px solid #161616;
-            position: relative;
-            margin: -25px auto 0;
+            border: 3px solid var(--main-color);
+            margin: 0 auto 25px;
+            display: block;
+            object-fit: cover;
+            filter: drop-shadow(0 0 15px var(--glow-color));
+        }
+
+        .content {
+            color: #fff;
+            text-align: center;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            overflow: hidden;
         }
-        
-        .username {
-            text-align: center;
-            font-size: 15px;
-            margin-top: 12px;
-            color: white;
-            font-weight: 400;
-            cursor: pointer;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 18px;
-            margin-top: 15px;
-        }
-        
-        .social-icon {
-            font-size: 24px;
-            color: white;
-            text-decoration: none;
+
+        h1 {
+            color: var(--main-color);
+            font-size: 2.5em;
+            margin: 20px 0;
             position: relative;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
-        
-        .social-icon:hover {
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+
+        p {
+            margin: 10px 0;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
         }
-        
-        .info {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 13px;
-            color: #aaaaaa;
-            line-height: 130%;
-            font-weight: 400;
-        }
-        
-        .highlight-kraze {
-            background: linear-gradient(90deg, #00e5bb, #00ffdb);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-        }
-        
-        .highlight-opensource {
-            background: linear-gradient(90deg, #00a2ff, #0dcaf3);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .years {
-            text-align: center;
-            margin-top: 25px;
-            margin-bottom: 20px;
-            font-size: 11px;
-            color: #666666;
-            font-weight: 300;
-        }
-        
-        .copy-notification {
+
+        .player {
             position: fixed;
             bottom: 30px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(10px);
-            border-radius: 8px;
-            padding: 12px 20px;
-            color: white;
-            font-size: 14px;
-            font-weight: 400;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            width: auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            border-radius: 10px;
+            z-index: 3;
+            backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             gap: 8px;
-            z-index: 1000;
         }
-        
-        .copy-notification.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
-        .notification-icon {
-            color: #00e5bb;
-            font-size: 16px;
+
+        button {
+            background: none;
+            border: 1px solid var(--main-color);
+            color: var(--main-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: 0.3s;
+            cursor: none;
+            font-size: 14px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
         }
-        
+
+        input[type="range"] {
+            width: 80px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            appearance: none;
+            border-radius: 2px;
+            margin: 0 5px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--main-color);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--glow-color);
+            cursor: none;
+        }
+
+        .social-links {
+            margin-top: 20px;
+            display: flex;
+            gap: 25px;
+        }
+
+        .social-link {
+            color: white;
+            font-size: 24px;
+            transition: 0.3s;
+            text-shadow: 0 0 15px rgba(255,255,255,0.5);
+            position: relative;
+        }
+
+        .social-link:hover {
+            color: var(--main-color);
+            transform: translateY(-3px);
+            text-shadow: 0 0 25px rgba(255,255,255,0.8);
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            background: rgba(0,0,0,0.8);
+            cursor: none;
+        }
+
+        .preloader h2 {
+            color: white;
+            font-size: 3em;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            animation: pulse 2s infinite;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .track-info {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(6px);
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            filter: blur(2px);
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            transition: 
+                transform 0.1s,
+                opacity 0.3s;
+            z-index: 9999;
+        }
+
+        .cursor::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: pulseCursor 1.5s infinite;
+        }
+
+        @keyframes pulseCursor {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.3; }
+        }
+
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        .snow {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(200px);
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
     </style>
-    <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div id="video-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 20; display: flex; justify-content: center; align-items: center; cursor: pointer;">
-        <div style="color: white; font-size: 18px; text-align: center;">
-            <div>Click Me!</div>
-        </div>
-    </div>
-
-    <video id="background-video" class="background-video">
-        <source src="video/govno.mp4" type="video/mp4">
-    </video>
-
-    <div class="container">
-        <div class="card">
-            <div class="banner-container">
-                <div class="banner">
-                    <img src="images/avatar.png" alt="Profile Avatar" style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-            </div>
-            <div class="profile-picture">
-                <img src="images/avatar.png" alt="Profile Avatar" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-            <div class="username" id="username" onclick="if (!window.__cfRLUnblockHandlers) return false; copyUsername()" data-cf-modified-9f5a526843d5f48af0df31ec-="">@kow1nc</div>
-            <div class="social-links">
-                <a href="https://github.com/pioneeer" target="_blank" class="social-icon"><i class="fab fa-github"></i></a>
-                <a href="https://t.me/kow1nc" target="_blank" class="social-icon"><i class="fab fa-telegram"></i></a>
-            </div>
-            <div class="info">
-                <div><span class="highlight-kraze" id="Link" onclick="if (!window.__cfRLUnblockHandlers) return false; copyLink()" data-cf-modified-9f5a526843d5f48af0df31ec-="">kraze</span> developer</div>
-                <div><span class="highlight-opensource">open source</span> ambassador</div>
-            </div>
-            <div class="years">
-                cheat developer since 2022
-            </div>
-        </div>
+    <div class="snow-container"></div>
+    <div class="video-container">
+        <div class="video-blur"></div>
+        <video class="video-bg" autoplay="" muted="" loop="" playsinline="">
+            <source src="video.mp4" type="video/mp4">
+        </video>
     </div>
     
-    <div class="copy-notification" id="copyNotification">
-        <i class="fas fa-check-circle notification-icon"></i>
-        <span id="notificationText">Copied!</span>
+    <div class="cursor" style="left: 337px; top: 199px;"></div>
+    
+    <div class="preloader" style="display: none;">
+        <h2>Ты точно хочешь увидеть это?</h2>
+    </div>
+    
+    <div class="card active" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px);">
+        <img src="Avatar.png" class="avatar" alt="Kow1nc Avatar">
+        <div class="content">
+            <h1 class="glitch">***1nc</h1>
+            <p>Java/C#</p>
+            <p>Создатель Kraze Newera</p>
+            <p>10+ Слитых срк</p>
+            <p>0 Паст</p>
+            <p>#@?@# Game crashed! Sosi huyaku blya. #@?@#</p>
+            
+            <div class="social-links">
+                <a href="https://youtube.com/channel/Kow1nc/" target="_blank" class="social-link">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://discord.gg/PKHtQp2W4E" target="_blank" class="social-link">
+                    <i class="fab fa-discord"></i>
+                </a>
+            </div>
+        </div>
     </div>
 
-    <script type="9f5a526843d5f48af0df31ec-text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-            const videoOverlay = document.getElementById('video-overlay');
-            const videoElement = document.getElementById('background-video');
-            const container = document.querySelector('.container');
-            
-            container.style.visibility = 'hidden';
-            
-            videoOverlay.addEventListener('click', function() {
-                videoOverlay.style.display = 'none';
-                
-                videoElement.muted = false;
-                videoElement.play();
-                
-                setTimeout(function() {
-                    videoElement.classList.add('faded');
-                    container.style.visibility = 'visible';
-                }, 2650);
-            });
+    <div class="track-info" id="trackInfo">Трек: two</div>
+    
+    <div class="player">
+        <audio id="audioPlayer" src="song2.mp3"></audio>
+        <div class="controls">
+            <button onclick="previousTrack()">⏮</button>
+            <button onclick="togglePlay()" id="playBtn">⏸</button>
+            <button onclick="nextTrack()">⏭</button>
+            <input type="range" id="volume" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)">
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
         });
+
+        const preloader = document.querySelector('.preloader');
+        const card = document.querySelector('.card');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const trackTitles = [
+            "one",
+            "two",
+            "three"
+        ];
+        const trackInfo = document.getElementById('trackInfo');
+        let currentTrack = 0;
         
-        function copyUsername() {
-            const usernameElement = document.getElementById('username');
-            const fullUsername = usernameElement.textContent;
-            const username = fullUsername.substring(1);
+        async function initExperience() {
+            preloader.style.display = 'none';
+            card.classList.add('active');
+            try {
+                await audioPlayer.play();
+                playBtn.innerHTML = '⏸';
+            } catch (err) {
+                playBtn.innerHTML = '▶';
+            }
+            startGlitch();
+            trackInfo.textContent = `Трек: ${trackTitles[currentTrack]}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            audioPlayer.src = 'song1.mp3';
+            audioPlayer.volume = 1;
+            try {
+                await audioPlayer.play();
+                playBtn.innerHTML = '⏸';
+                preloader.style.display = 'none';
+                card.classList.add('active');
+                startGlitch();
+            } catch (err) {
+                document.addEventListener('click', initExperience, { once: true });
+            }
+        });
+        let rafId;
+        const handleMove = (e) => {
+            if(rafId) cancelAnimationFrame(rafId);
             
-            navigator.clipboard.writeText(username)
-                .then(() => {
-                    showNotification("Username copied!");
-                })
-                .catch(err => {
-                    console.error('Не удалось скопировать текст: ', err);
-                });
+            rafId = requestAnimationFrame(() => {
+                const rect = card.getBoundingClientRect();
+                const centerX = rect.left + rect.width/2;
+                const centerY = rect.top + rect.height/2;
+                
+                const rotateX = (centerY - e.clientY) / 30;
+                const rotateY = (e.clientX - centerX) / 30;
+                
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateX(${rotateX}deg)
+                    rotateY(${rotateY}deg)
+                `;
+            });
+        };
+
+        card.addEventListener('mouseenter', () => {
+            document.addEventListener('mousemove', handleMove);
+        });
+
+        card.addEventListener('mouseleave', () => {
+            document.removeEventListener('mousemove', handleMove);
+            card.style.transform = `
+                perspective(1000px)
+                rotateX(0deg)
+                rotateY(0deg)
+                translateZ(0)
+            `;
+        });
+
+
+        const chars = '*';
+        const originalText = 'Kow1nc';
+        let glitchInterval;
+
+        function randomChar() {
+            return chars[Math.floor(Math.random() * chars.length)];
         }
-        
-        function copyLink() {
-            navigator.clipboard.writeText("https://discord.gg/PKHtQp2W4E")
-                .then(() => {
-                    showNotification("link copied!");
-                })
-                .catch(err => {
-                    console.error('Не удалось скопировать ссылку: ', err);
-                });
+
+        function startGlitch() {
+            glitchInterval = setInterval(() => {
+                const textArray = originalText.split('');
+                for(let i = 0; i < textArray.length; i++) {
+                    if(Math.random() < 0.4) textArray[i] = randomChar();
+                }
+                document.querySelector('.glitch').textContent = textArray.join('');
+                
+                setTimeout(() => {
+                    document.querySelector('.glitch').textContent = originalText;
+                }, 50);
+            }, 100);
         }
-        
-        function showNotification(text) {
-            const notification = document.getElementById('copyNotification');
-            const notificationText = document.getElementById('notificationText');
-            notificationText.textContent = text;
-            notification.classList.add('show');
+        const playBtn = document.getElementById('playBtn');
+        const tracks = ['song1.mp3', 'song2.mp3', 'song3.mp3'];
+
+        function togglePlay() {
+            if(audioPlayer.paused) {
+                audioPlayer.play();
+                playBtn.innerHTML = '⏸';
+            } else {
+                audioPlayer.pause();
+                playBtn.innerHTML = '▶';
+            }
+        }
+
+        function nextTrack() {
+            currentTrack = (currentTrack + 1) % tracks.length;
+            audioPlayer.src = tracks[currentTrack];
+            audioPlayer.play();
+            trackInfo.textContent = `Трек: ${trackTitles[currentTrack]}`;
+        }
+
+        function previousTrack() {
+            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+            audioPlayer.src = tracks[currentTrack];
+            audioPlayer.play();
+            trackInfo.textContent = `Трек: ${trackTitles[currentTrack]}`;
+        }
+
+        function setVolume(volume) {
+            audioPlayer.volume = volume;
+        }
+
+
+        function createSnow() {
+            const snowContainer = document.querySelector('.snow-container');
+            const snowCount = 100;
             
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 2000);
+            for(let i = 0; i < snowCount; i++) {
+                const snow = document.createElement('div');
+                snow.className = 'snow';
+                
+                const size = Math.random() * 4 + 3;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 3 + 5;
+                
+                snow.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${left}%;
+                    animation-delay: ${delay}s;
+                    animation-duration: ${duration}s;
+                `;
+                
+                snow.addEventListener('animationend', () => {
+                    snow.remove();
+                    const newSnow = document.createElement('div');
+                    newSnow.className = 'snow';
+                    newSnow.style.cssText = snow.style.cssText;
+                    snowContainer.appendChild(newSnow);
+                });
+                
+                snowContainer.appendChild(snow);
+            }
         }
-        
+
+        // ща не зима ни буду юзат
+       // createSnow();
     </script>
-<script src="cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="9f5a526843d5f48af0df31ec-|49" defer=""></script>
-</body></html>
+
+
+<div id="audd-recorder-marker" style="display: none;"></div></body></html>
