@@ -1,8 +1,11 @@
-<html lang="ru"><head>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kow1nc | Kraze</title>
+    <title>Kowyaka / Kow1nc</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,7 +19,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Courier New', monospace;
+            font-family: 'Roboto', sans-serif;
             overflow: hidden;
             position: relative;
             background: #000;
@@ -62,7 +65,7 @@
             padding: 30px;
             position: relative;
             transform-style: preserve-3d;
-            box-shadow: 0 0 50px var(--glow-color);
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.5), 0 0 100px rgba(255, 255, 255, 0.3);
             z-index: 2;
             overflow: hidden;
             opacity: 0;
@@ -141,16 +144,28 @@
             gap: 8px;
         }
 
-        button {
-            background: none;
-            border: 1px solid var(--main-color);
+        .controls button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
             color: var(--main-color);
-            padding: 6px 12px;
-            border-radius: 8px;
-            transition: 0.3s;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: background 0.3s, transform 0.3s;
             cursor: none;
-            font-size: 14px;
-            text-shadow: 0 0 5px rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .controls button i {
+            font-size: 20px;
+        }
+
+        .controls button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
         }
 
         input[type="range"] {
@@ -235,15 +250,13 @@
             position: fixed;
             width: 30px;
             height: 30px;
-            border: 2px solid rgba(255,255,255,0.5);
+            border: 2px solid rgba(255, 255, 255, 0.7);
             border-radius: 50%;
             pointer-events: none;
             transform: translate(-50%, -50%);
             filter: blur(2px);
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
-            transition: 
-                transform 0.1s,
-                opacity 0.3s;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3);
+            transition: transform 0.1s, opacity 0.3s;
             z-index: 9999;
         }
 
@@ -255,11 +268,6 @@
             border-radius: 50%;
             background: rgba(255,255,255,0.1);
             animation: pulseCursor 1.5s infinite;
-        }
-
-        @keyframes pulseCursor {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.3; }
         }
 
         .snow-container {
@@ -282,6 +290,25 @@
             animation: fall linear infinite;
         }
 
+        .equalizer {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-left: 10px;
+        }
+
+        .equalizer-bar {
+            width: 4px;
+            height: 20px;
+            background: var(--main-color);
+            animation: equalize 1.5s infinite;
+        }
+
+        @keyframes equalize {
+            0%, 100% { height: 5px; }
+            50% { height: 20px; }
+        }
+
         @keyframes fall {
             0% {
                 transform: translateY(-100vh) translateX(0);
@@ -297,31 +324,36 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
+
+        @keyframes pulseCursor {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.3; }
+        }
     </style>
 </head>
 <body>
     <div class="snow-container"></div>
     <div class="video-container">
         <div class="video-blur"></div>
-        <video class="video-bg" autoplay="" muted="" loop="" playsinline="">
+        <video class="video-bg" autoplay muted loop playsinline>
             <source src="video.mp4" type="video/mp4">
         </video>
     </div>
     
-    <div class="cursor" style="left: 337px; top: 199px;"></div>
+    <div class="cursor"></div>
     
-    <div class="preloader" style="display: none;">
+    <div class="preloader">
         <h2>Ты точно хочешь увидеть это?</h2>
     </div>
     
-    <div class="card active" style="transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px);">
+    <div class="card">
         <img src="Avatar.png" class="avatar" alt="Kow1nc Avatar">
         <div class="content">
-            <h1 class="glitch">***1nc</h1>
+            <h1 class="glitch">Kow1nc</h1>
             <p>Java/C#</p>
-            <p>Создатель Kraze Newera</p>
-            <p>10+ Слитых срк</p>
-            <p>0 Паст</p>
+            <p>Kraze Newera</p>
+            <p>бля чё писать</p>
+            <p>бля чё писать</p>
             <p>#@?@# Game crashed! Sosi huyaku blya. #@?@#</p>
             
             <div class="social-links">
@@ -340,10 +372,16 @@
     <div class="player">
         <audio id="audioPlayer" src="song2.mp3"></audio>
         <div class="controls">
-            <button onclick="previousTrack()">⏮</button>
-            <button onclick="togglePlay()" id="playBtn">⏸</button>
-            <button onclick="nextTrack()">⏭</button>
+            <button onclick="previousTrack()"><i class="fas fa-step-backward"></i></button>
+            <button onclick="togglePlay()" id="playBtn"><i class="fas fa-play"></i></button>
+            <button onclick="nextTrack()"><i class="fas fa-step-forward"></i></button>
             <input type="range" id="volume" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)">
+            <div class="equalizer">
+                <div class="equalizer-bar"></div>
+                <div class="equalizer-bar" style="animation-delay: 0.2s;"></div>
+                <div class="equalizer-bar" style="animation-delay: 0.4s;"></div>
+                <div class="equalizer-bar" style="animation-delay: 0.6s;"></div>
+            </div>
         </div>
     </div>
 
@@ -370,9 +408,9 @@
             card.classList.add('active');
             try {
                 await audioPlayer.play();
-                playBtn.innerHTML = '⏸';
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
             } catch (err) {
-                playBtn.innerHTML = '▶';
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
             }
             startGlitch();
             trackInfo.textContent = `Трек: ${trackTitles[currentTrack]}`;
@@ -383,7 +421,7 @@
             audioPlayer.volume = 1;
             try {
                 await audioPlayer.play();
-                playBtn.innerHTML = '⏸';
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 preloader.style.display = 'none';
                 card.classList.add('active');
                 startGlitch();
@@ -391,6 +429,7 @@
                 document.addEventListener('click', initExperience, { once: true });
             }
         });
+
         let rafId;
         const handleMove = (e) => {
             if(rafId) cancelAnimationFrame(rafId);
@@ -425,38 +464,51 @@
             `;
         });
 
-
-        const chars = '*';
         const originalText = 'Kow1nc';
         let glitchInterval;
 
-        function randomChar() {
-            return chars[Math.floor(Math.random() * chars.length)];
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
 
         function startGlitch() {
+            const glitchElement = document.querySelector('.glitch');
             glitchInterval = setInterval(() => {
                 const textArray = originalText.split('');
-                for(let i = 0; i < textArray.length; i++) {
-                    if(Math.random() < 0.4) textArray[i] = randomChar();
-                }
-                document.querySelector('.glitch').textContent = textArray.join('');
+                let glitchedText = '';
+                textArray.forEach(char => {
+                    if (Math.random() < 0.3) {
+                        const shift = Math.floor(Math.random() * 11) - 5; // -5 to +5
+                        const glitchedChar = String.fromCharCode(char.charCodeAt(0) + shift);
+                        const color = getRandomColor();
+                        glitchedText += `<span style="color: ${color};">${glitchedChar}</span>`;
+                    } else {
+                        glitchedText += char;
+                    }
+                });
+                glitchElement.innerHTML = glitchedText;
                 
                 setTimeout(() => {
-                    document.querySelector('.glitch').textContent = originalText;
+                    glitchElement.textContent = originalText;
                 }, 50);
             }, 100);
         }
+
         const playBtn = document.getElementById('playBtn');
         const tracks = ['song1.mp3', 'song2.mp3', 'song3.mp3'];
 
         function togglePlay() {
             if(audioPlayer.paused) {
                 audioPlayer.play();
-                playBtn.innerHTML = '⏸';
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
             } else {
                 audioPlayer.pause();
-                playBtn.innerHTML = '▶';
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
             }
         }
 
@@ -478,6 +530,13 @@
             audioPlayer.volume = volume;
         }
 
+        const equalizerBars = document.querySelectorAll('.equalizer-bar');
+        audioPlayer.addEventListener('play', () => {
+            equalizerBars.forEach(bar => bar.style.animationPlayState = 'running');
+        });
+        audioPlayer.addEventListener('pause', () => {
+            equalizerBars.forEach(bar => bar.style.animationPlayState = 'paused');
+        });
 
         function createSnow() {
             const snowContainer = document.querySelector('.snow-container');
@@ -512,9 +571,7 @@
             }
         }
 
-        // ща не зима ни буду юзат
-       // createSnow();
+        // createSnow(); // Раскомментировать для эффекта снега
     </script>
-
-
-<div id="audd-recorder-marker" style="display: none;"></div></body></html>
+</body>
+</html>
